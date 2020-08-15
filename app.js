@@ -1,48 +1,58 @@
-var AWS = require('aws-sdk');
+const aws_sdk = require('aws-sdk');
+const { timeStamp } = require('console');
 
-var region = "ap-south-1";
-var accessKeyId = process.env.AKIAV4ZS7S3BS3YWGWFL;
-var secretAccessKey = process.env.+y4mfiN7KbNfpY6iJumN3dYxudqSgrvuQYr+UAfb;
-var tableName = "books_dev";
+aws_sdk.config.update({region: 'ap-south-1'});
 
-var dynamoDB = new AWS.DynamoDB.DocumentClient({
-  region: ap-south-1,
-  accessKeyId: accessKeyId,
-  secretAccessKey: secretAccessKey,
-});
+const books = new aws_sdk.DynamoDB.DocumentClient();
 
 
-var params = {
-  Item: {
-    book_id: 12345,
-    book_name: "demo",
-  },
 
-  TableName: tableName,
-};
+function addBook(){
+    const params = {
+        TableName:"books_dev",
+        Item:{
+            book_id:3,
+            book_name:'Harry Potter',
+            author:'J K',
+            cost: 500
+        }
+    }
 
-dynamoDB.put(params, function(err, data) {
-  if (err) {
-    console.error(err);
-  }
-  else {
-    console.log(data);
-  }
-});
+    return new Promise((res,rej)=>{
+        books.put(params, (err,response)=>{
+            if(err){
+                rej(err);
+            }
+            if(response){
+                res(response);
+            }
+        });
+    })
 
+}
 
-//var fileItem = {
-  //  Key: {
-    //  book_id: 1234
-    //},
-    //TableName: tableName,
-//};
+function getBook(){
+	
+    const params = {
+        TableName:"books_dev",
+        Key:{
+            book_id:1
+        }
+    };
+    return new Promise((res,rej)=>{
+        books.get(params, (err,response)=>{
+            if(err){
+                rej(err);
+            }
+            if(response){
+               res(console.log(response));
+            }
+        });
+    })
 
-//dynamoDB.delete(fileItem, function(err, data) {
- // if (err) {
-   // console.log(err, err.stack);
-  //}
- // else {
-   // console.log(data);
-  //}
-//});
+}
+async function test() {
+    const response = await getBook();
+}
+
+test();

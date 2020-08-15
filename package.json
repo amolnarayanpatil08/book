@@ -5,12 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-
-
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.734.0",
     "koa": "^2.13.0"
   }
 }
