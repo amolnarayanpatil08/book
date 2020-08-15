@@ -14,7 +14,7 @@ var dynamoDB = new AWS.DynamoDB.DocumentClient({
 
 var params = {
   Item: {
-    book_id: 12345,
+    book_id: 12348,
     book_name: "demo",
   },
 
