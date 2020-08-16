@@ -7,6 +7,6 @@ const handler = require('./handler');
 
 router.get('/IdByName/:bookName', handler.getId);
 router.get('/buyBook/:bookId', handler.bookId);
-router.get('/addBook',handler.callAddBook);
+router.post('/addBook', handler.callAddBook);
 
 module.exports = router;
