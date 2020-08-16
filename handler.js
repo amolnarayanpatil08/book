@@ -185,36 +185,7 @@ async function bookId(ctx) {
 
 
 
-let addBook = function () {
-    var params = {
-        TableName: "books_dev",
-        Item: {
-            book_id:12,
-            book_name:'Demo',
-            author:'APJ ABDUL KALAM',
-            cost: 650,
-            category:"PHILOSOPHY",
-            quantity:10
-        }
-    };
 
-
-      return new Promise((res,rej)=>{
-        docClient.put(params,(err,Response)=>{
-            if (err) {
-
-                  rej(err)
-                //console.log("users::addBook::error - " + JSON.stringify(err, null, 2));
-            }
-            if(Response){
-                res(Response.Item) 
-                //console.log("users::addBook::success - " + JSON.stringify(Response, null, 2));
-            }
-
-        })
-    })
-
-}
 
 async function isAvailable(book_name) {
     const response = await Available(book_name);
@@ -257,15 +228,45 @@ async function isAvailable(book_name) {
      );
 }
 
+let addBook = function (valueObject) {
+    var params = {
+        TableName: "books_dev",
+        Item: {
+            book_id: parseInt(valueObject.book_id),
+            book_name: valueObject.book_name,
+            quantity: parseInt(valueObject.quantity),
+            author: valueObject.author
+
+        },
+    };
+
+
+    return new Promise((res, rej) => {
+        docClient.put(params, (err, Response) => {
+            if (err) {
+
+                rej(err)
+                //console.log("users::addBook::error - " + JSON.stringify(err, null, 2));
+            }
+            if (Response) {
+                res(Response.Item)
+                //console.log("users::addBook::success - " + JSON.stringify(Response, null, 2));
+            }
+
+        })
+    })
+
+}
+
 async function callAddBook(ctx) {
-    await addBook().then(
+    await addBook(ctx.request.body).then(
         result => {
-            ctx.body=result;
+            ctx.body = result;
         }
-    ).catch(err=>{
-        ctx.body=err;
+    ).catch(err => {
+        ctx.body = err;
     }
-     )
+    )
 }
 
 module.exports = {
@@ -280,6 +281,8 @@ module.exports = {
 	byName,
 	byAuthor,
 	callAddBook,
+	buyBook,
+	bookId,
     
 }
 
