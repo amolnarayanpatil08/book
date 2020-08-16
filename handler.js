@@ -137,6 +137,85 @@ function Available(bookn){
     })
 }
 
+function buyBook(Bid) {
+    var params = {
+
+        TableName: "books_dev",
+        Key: {
+            book_id: Bid,
+
+        },
+        UpdateExpression: "set quantity = quantity - :val",
+        ConditionExpression: 'quantity > :inc',
+        ExpressionAttributeValues: {
+
+            ":val": 1,
+            ":inc": 0
+        },
+        ReturnValues: "UPDATED_NEW"
+    };
+
+    console.log("Updating the item...");
+
+    return new Promise((res, rej) => {
+
+        docClient.update(params, function (err, data) {
+            if (err) {
+                rej(err)
+                //console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
+            } if (data) {
+                res(data)
+                //console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+            }
+        });
+    })
+
+}
+
+async function bookId(ctx) {
+    await buyBook(parseInt(ctx.params.bookId)).then(
+        result => {
+            ctx.body = result;
+        }
+    ).catch(err => {
+        ctx.body = err;
+    }
+    )
+}
+
+
+
+let addBook = function () {
+    var params = {
+        TableName: "books_dev",
+        Item: {
+            book_id:12,
+            book_name:'Demo',
+            author:'APJ ABDUL KALAM',
+            cost: 650,
+            category:"PHILOSOPHY",
+            quantity:10
+        }
+    };
+
+
+      return new Promise((res,rej)=>{
+        docClient.put(params,(err,Response)=>{
+            if (err) {
+
+                  rej(err)
+                //console.log("users::addBook::error - " + JSON.stringify(err, null, 2));
+            }
+            if(Response){
+                res(Response.Item) 
+                //console.log("users::addBook::success - " + JSON.stringify(Response, null, 2));
+            }
+
+        })
+    })
+
+}
+
 async function isAvailable(book_name) {
     const response = await Available(book_name);
     return response;
@@ -168,6 +247,8 @@ async function isAvailable(book_name) {
  async function byAuthor(ctx) {
       await getByAuthor(ctx.params.Author).then(
         result => {
+		if(result.length==0){ ctx.body='No Data for this author';}
+	else
             ctx.body=result;
         }
     ).catch(err=>{
@@ -176,6 +257,16 @@ async function isAvailable(book_name) {
      );
 }
 
+async function callAddBook(ctx) {
+    await addBook().then(
+        result => {
+            ctx.body=result;
+        }
+    ).catch(err=>{
+        ctx.body=err;
+    }
+     )
+}
 
 module.exports = {
     getIdByName,
@@ -188,6 +279,7 @@ module.exports = {
 	byId,
 	byName,
 	byAuthor,
+	callAddBook,
     
 }
 

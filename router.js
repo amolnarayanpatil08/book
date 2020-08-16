@@ -9,7 +9,7 @@ router.get('/IdByName/:bookName', handler.getId);
 router.get('/byId/:Id',handler.byId);
 router.get('/byName/:Name',handler.byName);
 router.get('/byAuthor/:Author',handler.byAuthor);
-
+router.put('/addBook',handler.callAddBook);
 
 
 module.exports = router;
