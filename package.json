@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-
-
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "koa": "^2.13.0"
+    "aws-sdk": "^2.734.0",
+    "koa": "^2.13.0",
+    "koa-body": "^4.2.0",
+    "koa-router": "^9.4.0"
   }
 }
