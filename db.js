@@ -108,9 +108,9 @@ let addBook = function (valueObject) {
     var params = {
         TableName: "books_dev",
         Item: {
-            book_id: parseInt(valueObject.book_id),
+            book_id: valueObject.book_id,
             book_name: valueObject.book_name,
-            quantity: parseInt(valueObject.quantity),
+            quantity: valueObject.quantity,
             author: valueObject.author
 
         },
@@ -122,11 +122,9 @@ let addBook = function (valueObject) {
             if (err) {
 
                 rej(err)
-                //console.log("users::addBook::error - " + JSON.stringify(err, null, 2));
             }
             if (Response) {
                 res(Response.Item)
-                //console.log("users::addBook::success - " + JSON.stringify(Response, null, 2));
             }
 
         })
@@ -140,5 +138,6 @@ module.exports = {
 	getByAuthor,
     buyBook,
     docClient,
+    addBook,
     
 }

@@ -1,10 +1,6 @@
-const aws_sdk = require('aws-sdk');
-const { timeStamp } = require('console');
+
 db = require('./db');
 
-// aws_sdk.config.update({region: 'ap-south-1'});
-
-// const docClient = new aws_sdk.DynamoDB.DocumentClient();
 
 async function bookId(ctx) {
     await db.buyBook(parseInt(ctx.params.bookId)).then(
