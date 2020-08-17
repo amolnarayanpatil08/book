@@ -134,8 +134,8 @@ let addBook = function (valueObject) {
 
 module.exports = {
     getByBookId,
-	getByBookName,
-	getByAuthor,
+    getByBookName,
+    getByAuthor,
     buyBook,
     docClient,
     addBook,
