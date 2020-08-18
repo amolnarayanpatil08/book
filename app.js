@@ -1,9 +1,12 @@
-var AWS = require('aws-sdk');
+const koa = require('koa');
+const logger = require('koa-logger');
+const app = new koa();
+const router = require('./router');
 
-var region = "ap-south-1";
-var accessKeyId = process.env.AKIAV4ZS7S3BS3YWGWFL;
-var secretAccessKey = process.env.+y4mfiN7KbNfpY6iJumN3dYxudqSgrvuQYr+UAfb;
-var tableName = "books_dev";
+app.use(logger());
+app.use(require('koa-body')());
+app.use(router.allowedMethods());
+app.use(router.routes());
 
 var dynamoDB = new AWS.DynamoDB.DocumentClient({
   region: ap-south-1,
@@ -31,18 +34,6 @@ dynamoDB.put(params, function(err, data) {
 });
 
 
-//var fileItem = {
-  //  Key: {
-    //  book_id: 1234
-    //},
-    //TableName: tableName,
-//};
 
-//dynamoDB.delete(fileItem, function(err, data) {
- // if (err) {
-   // console.log(err, err.stack);
-  //}
- // else {
-   // console.log(data);
-  //}
-//});
+app.listen(3000);
+
