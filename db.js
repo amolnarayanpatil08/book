@@ -1,9 +1,9 @@
 const aws_sdk = require('aws-sdk');
-const { timeStamp } = require('console');
+const schema = require('./validation');
 
 aws_sdk.config.update({region: 'ap-south-1'});
 
-const docClient = new aws_sdk.DynamoDB.DocumentClient();
+const book = new aws_sdk.DynamoDB.DocumentClient();
 
 function getByBookId(id) {
     var params = {
@@ -14,7 +14,7 @@ function getByBookId(id) {
     };
 
     return new Promise((res,rej)=>{
-        docClient.get(params, (err,response)=>{  
+        book.get(params, (err,response)=>{  
             if(err){
                 rej(err);
             }
@@ -35,7 +35,7 @@ function getByBookName(name) {
     },
     };
     return new Promise((res,rej)=>{
-        docClient.query(params, (err,response)=>{  
+        book.query(params, (err,response)=>{  
             if(err){
                 rej(err);
             }
@@ -57,7 +57,7 @@ function getByAuthor(AuthorName) {
     },
     };
     return new Promise((res,rej)=>{
-        docClient.query(params, (err,response)=>{  
+        book.query(params, (err,response)=>{  
             if(err){
                 rej(err);
             }
@@ -94,7 +94,7 @@ function buyBook(Bid) {
 
     return new Promise((res, rej) => {
 
-        docClient.update(params, function (err, data) {
+        book.update(params, function (err, data) {
             if (err) {
                 rej(err)
             } if (data) {
@@ -105,28 +105,25 @@ function buyBook(Bid) {
 
 }
 let addBook = function (valueObject) {
+    
     var params = {
         TableName: "books_dev",
         Item: {
-            book_id: parseInt(valueObject.book_id),
+            book_id: valueObject.book_id,
             book_name: valueObject.book_name,
-            quantity: parseInt(valueObject.quantity),
+            quantity: valueObject.quantity,
             author: valueObject.author
-
         },
     };
 
 
     return new Promise((res, rej) => {
-        docClient.put(params, (err, Response) => {
+        book.put(params, (err, Response) => {
             if (err) {
-
                 rej(err)
-                //console.log("users::addBook::error - " + JSON.stringify(err, null, 2));
             }
             if (Response) {
                 res(Response.Item)
-                //console.log("users::addBook::success - " + JSON.stringify(Response, null, 2));
             }
 
         })
@@ -139,6 +136,7 @@ module.exports = {
 	getByBookName,
 	getByAuthor,
     buyBook,
-    docClient,
-    
+    addBook,
+    book,
+
 }
