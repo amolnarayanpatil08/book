@@ -88,11 +88,39 @@ async function callAddBook(ctx) {
     )
 }
 
+async function callAddIssueDetails(ctx) {
+    await addIssueDetails(ctx.request.body).then(
+        result => {
+            ctx.body = result;
+        }
+    ).catch(err => {
+        if(err){
+            if(err.code=="ValidationException"){
+                ctx.body="Please add numeric value";
+            } 
+            else
+            ctx.body="Please add existing book id";
+        }     
+    }
+    )
+}
+
+async function addIssueDetails(valueObject) {
+    var user_id = await db.getUser();
+    var book = await db.getDays(parseInt(valueObject.bid));
+    var issue_id= parseInt(valueObject.id);
+    let date = new Date(); 
+    var return_date=await (date.addDays(book.days)).toString();
+    var response = await db.issueDetails(issue_id,book.book_id,user_id,return_date);
+}
+
 module.exports = {
 	byId,
 	byName,
 	byAuthor,
 	callAddBook,
-	bookId
+    bookId,
+    callAddIssueDetails
 }
+
 
