@@ -2,6 +2,8 @@ const aws_sdk = require('aws-sdk');
 db = require('./db');
 const schema = require('./validation');
 
+
+
 async function bookId(ctx) {
     await db.buyBook(parseInt(ctx.params.bookId)).then(
         result => {
